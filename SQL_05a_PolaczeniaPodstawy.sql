@@ -35,3 +35,28 @@ FROM PRACOWNICY JOIN ETATY ON ETAT=NAZWA WHERE PLACA_POD NOT BETWEEN PLACA_MIN A
 i widełki płacowe, w jakich mieści się pensja pracownika. Kategoria płacowa to nazwa etatu (z tabeli
 Etaty), do którego pasuje płaca podstawowa pracownika (zawiera się w przedziale płac dla etatu).
 Wynik posortuj wg nazwisk i kategorii płacowych pracowników. 
+SELECT NAZWISKO, PLACA_POD, ETAT, NAZWA AS KAT_PLAC, PLACA_MIN, PLACA_MAX FROM PRACOWNICY JOIN ETATY ON PLACA_POD BETWEEN PLACA_MIN AND PLACA_MAX ORDER BY NAZWISKO, KAT_PLAC;
+
+-- 7. Powyższy zbiór ogranicz do tych pracowników, których rzeczywiste zarobki odpowiadają widełkom
+płacowym przewidzianym dla sekretarek. Wynik posortuj wg nazwisk pracowników.
+SELECT NAZWISKO, PLACA_POD, ETAT, NAZWA AS KAT_PLAC, PLACA_MIN, PLACA_MAX FROM PRACOWNICY JOIN ETATY ON PLACA_POD BETWEEN PLACA_MIN AND PLACA_MAX WHERE NAZWA = 'SEKRETARKA' ORDER BY NAZWISKO, KAT_PLAC;
+
+-- 8. Wyświetl nazwiska i numery pracowników wraz z numerami i nazwiskami ich szefów. Wynik
+posortuj wg nazwisk pracowników. W zbiorze wynikowym mają się pojawić tylko ci pracownicy,
+którzy mają szefów. 
+SELECT 
+    P1.NAZWISKO AS PRACOWNIK, 
+    P1.ID_PRAC AS PRACOWNIK_ID, 
+    P2.NAZWISKO AS SZEF, 
+    P2.ID_PRAC AS SZEFA_ID
+FROM 
+    PRACOWNICY P1 
+JOIN 
+    PRACOWNICY P2 
+ON 
+    P1.ID_SZEFA = P2.ID_PRAC 
+ORDER BY 
+    P1.NAZWISKO;
+
+-- 9. Wyświetl nazwiska i daty zatrudnienia pracowników, którzy zostali zatrudnieni nie później niż 10 lat
+po swoich przełożonych. Wynik uporządkuj wg dat zatrudnienia i nazwisk pracowników.
