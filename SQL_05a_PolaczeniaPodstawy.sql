@@ -60,3 +60,49 @@ ORDER BY
 
 -- 9. Wyświetl nazwiska i daty zatrudnienia pracowników, którzy zostali zatrudnieni nie później niż 10 lat
 po swoich przełożonych. Wynik uporządkuj wg dat zatrudnienia i nazwisk pracowników.
+SELECT 
+    P1.NAZWISKO AS PRACOWNIK, 
+    TO_CHAR(P1.ZATRUDNIONY, 'YYYY.MM.DD') AS PRACOWNIK_ZATRUDNIONY, 
+    P2.NAZWISKO AS SZEF, 
+    TO_CHAR(P2.ZATRUDNIONY, 'YYYY.MM.DD') AS SZEFA_ZATURDNIONY,
+    FLOOR((P1.ZATRUDNIONY-P2.ZATRUDNIONY)/365) AS LATA
+FROM 
+    PRACOWNICY P1 
+JOIN 
+    PRACOWNICY P2 
+ON 
+    P1.ID_SZEFA = P2.ID_PRAC 
+WHERE 
+    FLOOR((P1.ZATRUDNIONY-P2.ZATRUDNIONY)/365) < 10
+ORDER BY 
+    P1.ZATRUDNIONY,P1.NAZWISKO;
+
+-- 10. Dla każdego zespołu, który zatrudnia pracowników, wyświetl liczbę zatrudnionych w nim
+pracowników i ich średnią płacę podstawową. Wynik posortuj wg nazw zespołów. 
+SELECT 
+    NAZWA, COUNT(ID_PRAC) AS LICZBA, AVG(PLACA_POD) AS SREDNIA_PLACA
+FROM 
+    ZESPOLY Z JOIN PRACOWNICY P ON Z.ID_ZESP = P.ID_ZESP  
+GROUP BY
+    NAZWA
+ORDER BY 
+    NAZWA
+
+-- 11.  Poetykietuj zespoły w zależności od liczby zatrudnionych pracowników. Jeśli zespół zatrudnia do
+dwóch pracowników, przydziel mu etykietę “mały”. Zespołom zatrudniającym od 3 do 6
+pracowników, przydziel etykietę “średni”. Jeśli departament zatrudnia 7 i więcej pracowników,
+powinien otrzymać etykietę “duży”. Pomiń departamenty bez pracowników.
+SELECT 
+    NAZWA,
+    CASE
+        WHEN COUNT(*) < 3 THEN 'MALY'
+        WHEN COUNT(*) BETWEEN 3 AND 6 THEN 'SREDNI'
+        WHEN COUNT(*) > 6 THEN 'DUZY'
+    END AS ETYKIETA
+FROM 
+    ZESPOLY Z JOIN PRACOWNICY P ON Z.ID_ZESP = P.ID_ZESP
+GROUP BY
+    NAZWA
+ORDER BY
+    NAZWA;
+
