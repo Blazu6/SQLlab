@@ -133,4 +133,30 @@ ORDER BY
     ETAT
 
 -- 11. Uzupełnij wynik poprzedniego zapytania o listę nazwisk pracowników na znalezionych etatach
+SELECT
+    ETAT, 
+    LISTAGG(NAZWISKO || ',') WITHIN GROUP (ORDER BY NAZWISKO) AS PRACOWNICY
+FROM
+    PRACOWNICY
+GROUP BY 
+    ETAT
+HAVING 
+    COUNT(*) = (SELECT MAX(COUNT(*))
+                FROM PRACOWNICY
+                GROUP BY ETAT)
+ORDER BY   
+    ETAT
 
+-- 12. Znajdź parę: pracownik – szef, dla której różnica między płacą pracownika a płacą jego szefa jest
+najniższa. 
+SELECT 
+    P1.NAZWISKO AS PRACOWNIK, P2.NAZWISKO AS SZEF
+FROM 
+    PRACOWNICY P1
+JOIN 
+    PRACOWNICY P2
+ON 
+    P1.ID_SZEFA = P2.ID_PRAC
+WHERE ABS(P1.PLACA_POD-P2.PLACA_POD) = (SELECT MIN(ABS(P1.PLACA_POD-P2.PLACA_POD))
+                                        FROM PRACOWNICY P1
+                                        JOIN PRACOWNICY P2 ON P1.ID_SZEFA = P2.ID_PRAC)
