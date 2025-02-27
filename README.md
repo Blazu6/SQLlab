@@ -1,2 +1,2 @@
-# SQL_lab
-Rozwiazania zadan 2024/2025 SEM.5
+#Data Science Assignments
+To repozytorium zawiera zadania rozwiązane w ramach moich studiów z zakresu Data Science. Znajdziesz tutaj polecenia oraz zapytania SQL, które zrealizowałem.
